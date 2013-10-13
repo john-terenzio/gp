@@ -1,4 +1,5 @@
-#include <inttypes.h>
+#include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,8 +13,8 @@ static uint32_t randintn(uint32_t n) {
   if (!urandom) {
     urandom = fopen("/dev/urandom", "rb");
   }
-  fread(&r, 4, 1, urandom);
-  return r % n;
+  fread(&r, sizeof(uint32_t), 1, urandom);
+  return floor(((double)r / UINT32_MAX) * n);
 }
 
 // chose a random character from a string and return it
