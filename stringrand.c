@@ -1,12 +1,11 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #pragma GCC diagnostic ignored "-Wunused-result"
 
-// return a random 32 bit integer in [0, n)
+// Return a random 32 bit integer in [0, n)
 static uint32_t randintn(uint32_t n) {
   static FILE *urandom = NULL;
   uint32_t r;
@@ -17,12 +16,12 @@ static uint32_t randintn(uint32_t n) {
   return floor(((double)r / UINT32_MAX) * n);
 }
 
-// chose a random character from a string and return it
+// Chose a random character from a string and return it
 char strrand(const char *str) {
   return str[randintn(strlen(str))];
 }
 
-// shuffle a string in place using the Fisher-Yates algorithm and return
+// Shuffle a string in place using the Fisher-Yates algorithm and return
 // a pointer to it
 char *strshuffle(char *str) {
   char tmp;
