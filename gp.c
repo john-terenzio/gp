@@ -1,51 +1,56 @@
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "gp.h"
 #include "stringrand.h"
 
-#define DEFAULT_LENGTH 12
-#define MAXIMUM_LENGTH 64
-#define DEFAULT_NUMBER 1
-#define MAXIMUM_NUMBER 64
+// Groups of possible characters
+static char *DIGITS = "0123456789";
+static char *LOWERS = "abcdefghijklmnopqrstuvwxyz";
+static char *UPPERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+static char *SYMBOLS = ".?~!@#$%&*";
 
-// groups of possible characters
-static const char *GROUPS[] = {
-  "0123456789",
-  "abcdefghijklmnopqrstuvwxyz",
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-};
-
-// print a random string (password) of length l <= 255 having at least one
-// character from each group
-void putsp(uint8_t l) {
-  char all[256] = "", out[MAXIMUM_LENGTH] = "";
-  uint8_t n = sizeof(GROUPS) / sizeof(GROUPS[0]), i, j;
-  l = l < n ? n : l > MAXIMUM_LENGTH ? MAXIMUM_LENGTH : l;
-  for (i = 0, j = 0; i < n; ++i, ++j) {
-    out[j] = strrand(GROUPS[i]);
-    strcat(all, GROUPS[i]);
+// Takes a gp_grouplist struct and populates it with the appropriate groups,
+// supergroup is a string of all the chosen groups' characters
+void gp_init_grouplist(gp_grouplist *grouplist, bool digits, bool lowers,
+                       bool uppers, bool symbols) {
+  grouplist->length = 0;
+  grouplist->supergroup[0] = 0;
+  if (digits) {
+    grouplist->groups[grouplist->length++] = DIGITS;
+    strcat(grouplist->supergroup, DIGITS);
   }
-  for (i = 0; i < l - n; ++i, ++j) {
-    out[j] = strrand(all);
+  if (lowers) {
+    grouplist->groups[grouplist->length++] = LOWERS;
+    strcat(grouplist->supergroup, LOWERS);
+  }
+  if (uppers) {
+    grouplist->groups[grouplist->length++] = UPPERS;
+    strcat(grouplist->supergroup, UPPERS);
+  }
+  if (symbols) {
+    grouplist->groups[grouplist->length++] = SYMBOLS;
+    strcat(grouplist->supergroup, SYMBOLS);
+  }
+}
+
+// Print a random string (password) of length <= 255 having at least one
+// character from each group
+void gp_puts(gp_grouplist *grouplist, uint8_t length) {
+  char out[GP_MAXIMUM_LENGTH + 1] = "";
+  uint8_t i, j;
+  if (length < grouplist->length) {
+    length = grouplist->length;
+  } else {
+    length = length > GP_MAXIMUM_LENGTH ? GP_MAXIMUM_LENGTH : length;
+  }
+  for (i = 0, j = 0; i < grouplist->length; ++i, ++j) {
+    out[j] = strrand(grouplist->groups[i]);
+  }
+  for (i = 0; i < length - grouplist->length; ++i, ++j) {
+    out[j] = strrand(grouplist->supergroup);
   }
   out[j] = 0;
   puts(strshuffle(out));
-}
-
-int main(int argc, const char *argv[]) {
-  uint8_t l = DEFAULT_LENGTH, n = DEFAULT_NUMBER, i;
-  for (i = 1; i < argc - 1; ++i) {
-    if (!strcmp(argv[i], "-l")) {
-      l = atoi(argv[i + 1]);
-    } else if (!strcmp(argv[i], "-n")) {
-      n = atoi(argv[i + 1]);
-      n = n > MAXIMUM_NUMBER ? MAXIMUM_NUMBER : n;
-    }
-  }
-  while (n--) {
-    putsp(l);
-  }
-  return EXIT_SUCCESS;
 }

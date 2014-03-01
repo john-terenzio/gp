@@ -1,5 +1,5 @@
 gp: stringrand.c gp.c
-	cc -std=c99 -Wall -O2 stringrand.c gp.c -o gp && strip gp
+	cc -std=c99 -Wall -O2 gp.c main.c stringrand.c -o gp && strip gp
 
 install:
 	mkdir -p /usr/local/bin/
