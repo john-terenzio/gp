@@ -14,4 +14,4 @@ typedef struct {
 
 void gp_init_grouplist(gp_grouplist *grouplist, bool digits, bool lowers,
                        bool uppers, bool symbols);
-void gp_puts(gp_grouplist *grouplist, uint8_t length);
+void gp_puts(gp_grouplist *grouplist, size_t length);

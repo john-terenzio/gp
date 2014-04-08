@@ -25,7 +25,7 @@ char strrand(const char *str) {
 // a pointer to it
 char *strshuffle(char *str) {
   char tmp;
-  uint32_t i = strlen(str), j;
+  size_t i = strlen(str), j;
   while (i) {
     j = randintn(i--);
     tmp = str[j];

@@ -5,14 +5,14 @@
 
 #include "gp.h"
 
-#define ABOUT "gp v0.0.2"
+#define ABOUT "gp v0.0.3"
 #define USAGE "usage: gp [-l num] [-n num] [--lowercase] " \
               "[--numeric] [--symbols]"
 
 int main(int argc, const char *argv[]) {
   bool digits = true, lowers = true, uppers = true, symbols = false;
   gp_grouplist grouplist;
-  uint8_t length = GP_DEFAULT_LENGTH, number = GP_DEFAULT_NUMBER, i;
+  size_t length = GP_DEFAULT_LENGTH, number = GP_DEFAULT_NUMBER, i;
   for (i = 1; i < argc; ++i) {
     if (!strcmp(argv[i], "-l")) {
       if (i + 1 < argc) {

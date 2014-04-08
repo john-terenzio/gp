@@ -16,7 +16,7 @@ static char *SYMBOLS = ".?~!@#$%&*";
 void gp_init_grouplist(gp_grouplist *grouplist, bool digits, bool lowers,
                        bool uppers, bool symbols) {
   grouplist->length = 0;
-  grouplist->supergroup[0] = 0;
+  grouplist->supergroup[0] = 0; // Empty string
   if (digits) {
     grouplist->groups[grouplist->length++] = DIGITS;
     strcat(grouplist->supergroup, DIGITS);
@@ -35,19 +35,21 @@ void gp_init_grouplist(gp_grouplist *grouplist, bool digits, bool lowers,
   }
 }
 
-// Print a random string (password) of length <= 255 having at least one
-// character from each group
-void gp_puts(gp_grouplist *grouplist, uint8_t length) {
+// Print a random string (password) of length <= GP_MAXIMUM_LENGTH having at
+// least one character from each group
+void gp_puts(gp_grouplist *grouplist, size_t length) {
   char out[GP_MAXIMUM_LENGTH + 1] = "";
-  uint8_t i, j;
+  size_t i, j;
   if (length < grouplist->length) {
     length = grouplist->length;
-  } else {
-    length = length > GP_MAXIMUM_LENGTH ? GP_MAXIMUM_LENGTH : length;
+  } else if (length > GP_MAXIMUM_LENGTH) {
+    length = GP_MAXIMUM_LENGTH;
   }
+  // Choose one character randomly from each group
   for (i = 0, j = 0; i < grouplist->length; ++i, ++j) {
     out[j] = strrand(grouplist->groups[i]);
   }
+  // Choose the rest of the characters from any group (supergroup)
   for (i = 0; i < length - grouplist->length; ++i, ++j) {
     out[j] = strrand(grouplist->supergroup);
   }
