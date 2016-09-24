@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define GP_DEFAULT_LENGTH 12
+#define GP_DEFAULT_LENGTH 11 /* about 65 bits of entropy for base62 */
 #define GP_MAXIMUM_LENGTH 64
 #define GP_DEFAULT_NUMBER 1
 #define GP_MAXIMUM_NUMBER 64
