@@ -11,19 +11,17 @@ $ sudo make install
 ##### Use
 ```
 $ gp --help
-usage: gp [-l num] [-n num] [--lowercase] [--numeric] [--symbols]
+usage: gp [-l <int>] [-n <int>] [--pin] [--nouppers] [--nolowers] [--nodigits] [--nosymbols]
 $ gp
-B9867cShclXj
+YQ6Lu*ufE18T
 $ gp -l 8
-OZ0W1HGs
-$ gp -l 8 -n 3
-XprFit0n
-7Tla87jg
-zlVt9fCk
-$ gp --lowercase
-3rju0q8xr03n
-$ gp --symbols
-$3x@G*#W.5Ea
-$ gp -l 4 --numeric
-2085
+^v72DJHx
+$ gp -n 3
+ooSPoREV-q^2
+Fizcd&d%wLd5
+B^pPcE08BU+3
+$ gp --nosymbols
+ygIrFoUL4MHo
+$ gp --pin
+6860
 ```

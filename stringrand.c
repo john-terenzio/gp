@@ -9,9 +9,11 @@
 static uint32_t randintn(uint32_t n) {
   static FILE *urandom = NULL;
   uint32_t r;
+
   if (!urandom) {
     urandom = fopen("/dev/urandom", "rb");
   }
+
   fread(&r, sizeof(uint32_t), 1, urandom);
   return floor(((double)r / UINT32_MAX) * n);
 }
@@ -26,11 +28,13 @@ char strrand(const char *str) {
 char *strshuffle(char *str) {
   char tmp;
   size_t i = strlen(str), j;
+
   while (i) {
     j = randintn(i--);
     tmp = str[j];
     str[j] = str[i];
     str[i] = tmp;
   }
+
   return str;
 }
