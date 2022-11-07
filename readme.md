@@ -1,27 +1,36 @@
 #### gp
-This is how I generate passwords.
+This is how I generate passwords (and learn C).
 
 ##### Install
 ```
 $ cd gp/
 $ make
-$ sudo make install
+$ make install
 ```
 
-##### Use
+##### Examples
 ```
-$ gp --help
-usage: gp [-l <int>] [-n <int>] [--pin] [--nouppers] [--nolowers] [--nodigits] [--nosymbols]
+$ gp -h
+gp v1.0
+usage: gp [-l <int>] [-n <int>] [-p] [-h][-x digits|uppers|lowers|symbols]
+
 $ gp
-YQ6Lu*ufE18T
+cM1@XS06d^Tf*Wpa
+
 $ gp -l 8
-^v72DJHx
+x2FXZeW*
+
 $ gp -n 3
-ooSPoREV-q^2
-Fizcd&d%wLd5
-B^pPcE08BU+3
-$ gp --nosymbols
-ygIrFoUL4MHo
-$ gp --pin
-6860
+6dd3gx+QGCoZ7uyP
+$Bw8vkdkc$HOf#3&
+75Cyl1V#hWItS3k*
+
+$ gp -x symbols
+dPoP8qr8MYYqV9W1
+
+$ gp -p
+2661
+
+$ gp -p -l 6
+159697
 ```
