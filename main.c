@@ -1,3 +1,4 @@
+#include <getopt.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,47 +6,56 @@
 
 #include "gp.h"
 
-#define ABOUT "gp v0.0.4"
-#define USAGE "usage: gp [-l <int>] [-n <int>] [--pin] " \
-              "[--nouppers] [--nolowers] [--nodigits] [--nosymbols]"
+#define ABOUT "gp v1.0"
+#define USAGE "usage: gp [-l <int>] [-n <int>] [-p] [-h]" \
+              "[-x digits|uppers|lowers|symbols]"
 
-int main(int argc, const char *argv[]) {
+int main(int argc, char *argv[]) {
   bool digits = true,
        lowers = true,
        uppers = true,
        symbols = true;
   gp_grouplist grouplist;
-  size_t length = GP_DEFAULT_LENGTH, number = GP_DEFAULT_NUMBER, i;
+  size_t length = GP_DEFAULT_LENGTH, number = GP_DEFAULT_NUMBER, opt;
 
-  for (i = 1; i < argc; ++i) {
-    if (!strcmp(argv[i], "-l")) {
-      if (i + 1 < argc) {
-        length = atoi(argv[i + 1]);
+  while ((opt = getopt(argc, argv, ":l:n:px:h")) != -1) {
+    if ('l' == opt) {
+      length = atoi(optarg);
+      if (0 == length) {
+        puts(USAGE);
+        return EXIT_FAILURE;
       }
-    } else if (!strcmp(argv[i], "-n")) {
-      if (i + 1 < argc) {
-        number = atoi(argv[i + 1]);
+    } else if ('n' == opt) {
+      number = atoi(optarg);
+      if (0 == number) {
+        puts(USAGE);
+        return EXIT_FAILURE;
       }
-      number = number > GP_MAXIMUM_NUMBER ? GP_MAXIMUM_NUMBER : number;
-    } else if (!strcmp(argv[i], "--pin")) {
+    } else if ('p' == opt) {
       length = 4;
       uppers = false;
       lowers = false;
       symbols = false;
-    } else if (!strcmp(argv[i], "--nouppers")) {
-      uppers = false;
-    } else if (!strcmp(argv[i], "--nolowers")) {
-      lowers = false;
-    } else if (!strcmp(argv[i], "--nodigits")) {
-      digits = false;
-    } else if (!strcmp(argv[i], "--nosymbols")) {
-      symbols = false;
-    } else if (!strcmp(argv[i], "--help")) {
-      puts(USAGE);
-      return EXIT_SUCCESS;
-    } else if (!strcmp(argv[i], "--version")) {
-      puts(ABOUT);
-      return EXIT_SUCCESS;
+    } else if ('x' == opt) {
+      if (!strcmp(optarg, "digits")) {
+        digits = false;
+      } else if (!strcmp(optarg, "uppers")) {
+        uppers = false;
+      } else if (!strcmp(optarg, "lowers")) {
+        lowers = false;
+      } else if (!strcmp(optarg, "symbols")) {
+        symbols = false;
+      } else {
+        puts(USAGE);
+        return EXIT_FAILURE;
+      }
+    } else if ('h' == opt) {
+        puts(ABOUT);
+        puts(USAGE);
+        return EXIT_SUCCESS;
+    } else {
+        puts(USAGE);
+        return EXIT_FAILURE;
     }
   }
 
