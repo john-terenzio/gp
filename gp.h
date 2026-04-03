@@ -4,7 +4,6 @@
 #define GP_DEFAULT_LENGTH 16
 #define GP_MAXIMUM_LENGTH 64
 #define GP_DEFAULT_NUMBER 1
-#define GP_MAXIMUM_NUMBER 64
 
 typedef struct {
   char *groups[4];
