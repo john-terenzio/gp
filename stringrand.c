@@ -1,9 +1,10 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#pragma GCC diagnostic ignored "-Wunused-result"
+#include "stringrand.h"
 
 // Return a random 32 bit integer in [0, n)
 static uint32_t randintn(uint32_t n) {
@@ -11,10 +12,18 @@ static uint32_t randintn(uint32_t n) {
   uint32_t r;
 
   if (!urandom) {
-    urandom = fopen("/dev/urandom", "rb");
+    urandom = fopen(URANDOM_PATH, "rb");
+    if (!urandom) {
+      perror("Failed to open " URANDOM_PATH);
+      exit(EXIT_FAILURE);
+    }
   }
 
-  fread(&r, sizeof(uint32_t), 1, urandom);
+  if (fread(&r, sizeof(uint32_t), 1, urandom) != 1) {
+    perror("Failed to read " URANDOM_PATH);
+    exit(EXIT_FAILURE);
+  }
+
   return floor(((double)r / UINT32_MAX) * n);
 }
 
