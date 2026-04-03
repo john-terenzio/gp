@@ -16,18 +16,18 @@ int main(int argc, char *argv[]) {
        uppers = true,
        symbols = true;
   gp_grouplist grouplist;
-  size_t length = GP_DEFAULT_LENGTH, number = GP_DEFAULT_NUMBER, opt;
+  int length = GP_DEFAULT_LENGTH, number = GP_DEFAULT_NUMBER, opt;
 
   while ((opt = getopt(argc, argv, ":l:n:px:h")) != -1) {
     if ('l' == opt) {
       length = atoi(optarg);
-      if (0 == length) {
+      if (0 >= length) {
         puts(USAGE);
         return EXIT_FAILURE;
       }
     } else if ('n' == opt) {
       number = atoi(optarg);
-      if (0 == number) {
+      if (0 >= number) {
         puts(USAGE);
         return EXIT_FAILURE;
       }
