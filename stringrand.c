@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +8,7 @@
 // Return a random 32 bit integer in [0, n)
 static uint32_t randintn(uint32_t n) {
   static FILE *urandom = NULL;
-  uint32_t r;
+  uint32_t r, limit;
 
   if (!urandom) {
     urandom = fopen(URANDOM_PATH, "rb");
@@ -19,12 +18,16 @@ static uint32_t randintn(uint32_t n) {
     }
   }
 
-  if (fread(&r, sizeof(uint32_t), 1, urandom) != 1) {
-    perror("Failed to read " URANDOM_PATH);
-    exit(EXIT_FAILURE);
-  }
+  // Rejection sampling: discard values that would cause bias
+  limit = UINT32_MAX - (UINT32_MAX % n);
+  do {
+    if (fread(&r, sizeof(uint32_t), 1, urandom) != 1) {
+      perror("Failed to read " URANDOM_PATH);
+      exit(EXIT_FAILURE);
+    }
+  } while (r >= limit);
 
-  return floor(((double)r / UINT32_MAX) * n);
+  return r % n;
 }
 
 // Chose a random character from a string and return it
