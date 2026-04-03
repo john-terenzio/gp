@@ -21,15 +21,21 @@ int main(int argc, char *argv[]) {
   while ((opt = getopt(argc, argv, ":l:n:px:h")) != -1) {
     if ('l' == opt) {
       length = atoi(optarg);
-      if (0 >= length) {
-        puts(USAGE);
-        return EXIT_FAILURE;
+      if (length < 4) {
+        fputs("Minimum length is 4...\n", stderr);
+        length = 4;
+      } else if (length > GP_MAXIMUM_LENGTH) {
+        fputs("Maximum length is 64...\n", stderr);
+        length = GP_MAXIMUM_LENGTH;
       }
     } else if ('n' == opt) {
       number = atoi(optarg);
-      if (0 >= number) {
-        puts(USAGE);
+      if (number < 1) {
+        fputs("N must be at least 1...\n", stderr);
         return EXIT_FAILURE;
+      } else if (number > 1000) {
+        number = 1000;
+        fputs("Stopping at 1,000...\n", stderr);
       }
     } else if ('p' == opt) {
       length = 4;
